@@ -17,7 +17,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   var _questionIndex = 0;
 
-  var _questions = [
+  //static const _questions = [
+  final _questions = const [
     {
       'questionText': 'What\'s your favorite color?',
       'answers': ['black', 'red', 'green', 'white'],
@@ -37,6 +38,11 @@ class _MyAppState extends State<MyApp> {
       _questionIndex = _questionIndex + 1;
     });
     print(_questionIndex);
+    if (_questionIndex < _questions.length) {
+      print('there are more questions');
+    } else {
+      print('no more questions');
+    }
   }
 
   @override
@@ -46,15 +52,19 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: Text('My App'),
         ),
-        body: Column(
-          children: <Widget>[
-            Question(_questions[_questionIndex]['questionText']),
-            ...(_questions[_questionIndex]['answers'] as List<String>)
-                .map((answer) {
-              return Answer(_answerQuestion, answer);
-            }).toList(),
-          ],
-        ),
+        body: _questionIndex < _questions.length
+            ? Column(
+                children: <Widget>[
+                  Question(_questions[_questionIndex]['questionText']),
+                  ...(_questions[_questionIndex]['answers'] as List<String>)
+                      .map((answer) {
+                    return Answer(_answerQuestion, answer);
+                  }).toList(),
+                ],
+              )
+            : Center(
+                child: Text('Finished'),
+              ),
       ),
     );
   }
